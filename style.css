@@ -1,4 +1,56 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  justify-items: center;
+}
+
+.splash {
+  display: grid;
+  background-color: rgba(77, 91, 158, 0.1);
+  grid-template-rows: 1fr 1fr;
+  width: 550px;
+  height: 550px;
+  justify-items: center;
+  border-radius: 7px;
+}
+
+.splash--subhead {
+  text-align: center;
+}
+
+h1 {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  align-self: end;
+  margin: 0;
+  transition: transform 0.7s ease-in-out;
+}
+
+h1:hover {
+  transform: rotate(360deg);
+}
+
+h2 {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.startButton {
+  background-color: rgb(77, 91, 158);
+  border: none; /* remove default button border */
+  padding: 10px 20px; /* adjust padding as needed */
+  color: white; /* text color */
+  border-radius: 7px; /* adjust corner roundness as desired */
+  cursor: pointer; /* indicates clickable element */
+}
