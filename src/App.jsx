@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import React from "react"
+import Splash from "./components/Splash"
 
-function App() {
+
+export default function App() {
 
   return (
-    <>
-      <div><h1>Hello, World!</h1></div>
-    </>
+    <main className="container">
+      <Splash />
+
+    </main>
   )
 }
 
-export default App
