@@ -9,15 +9,47 @@ export default function App() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://opentdb.com/api.php?amount=5');
+        const response = await fetch('https://opentdb.com/api.php?amount=5&category=13&difficulty=easy&type=multiple');
         const data = await response.json();
-        setQuizData(data);
+        const preparedData = prepareData(data);
+        setQuizData(preparedData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
+    fetchData()
   }, []); // not watching any variables, so only runs when we call it on the prev line
+
+  const prepareData = function (data) {
+    // Turn the data object (where the data has a results array of the info we need)
+    // into an array of objects, each of which has the answers set up the way we want
+    // and return that as updatedData
+
+    // loop through data.results and for each result object, make a new object with only
+    // what we need, and add to updatedData.
+
+    let updatedData = data.results.map(
+      item => {
+        const polishedItem = {
+          "question": item.question
+        }
+        return polishedItem
+      }
+    )
+
+
+    // Start with: making a basic object containing just the question
+    // Then add the answers as objects too - what info do they need to track?
+    // Then shuffle them
+    // Remember react needs unique ids on all of these, so let's add them too
+
+
+
+    // push the new object onto the array
+
+
+    return updatedData
+  }
 
   return (
     <main className="container">
@@ -36,7 +68,16 @@ export default function App() {
 
 
 
-
+// function allNewDice() {
+//   const newDice = []
+//   for (let i = 0; i < 10; i++) {
+//       newDice.push({
+//           value: Math.ceil(Math.random() * 6),
+//           isHeld: false,
+//           id: nanoid()
+//       })
+//   }
+//   return newDice
 
 
 
