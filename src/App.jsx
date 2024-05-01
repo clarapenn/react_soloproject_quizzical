@@ -22,6 +22,22 @@ export default function App() {
     fetchData()
   }, []); // not watching any variables, so only runs when we call it on the prev line
 
+  function shuffle(array) {
+    // https://stackoverflow.com/a/2450976
+    let currentIndex = array.length;
+
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+
+      // Pick a remaining element...
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+  }
+
   const prepareData = function (data) {
     // Turn the data object (where the data has a results array of the info we need)
     // into an array of objects, each of which has the answers set up the way we want
@@ -32,24 +48,33 @@ export default function App() {
 
     let updatedData = data.results.map(
       item => {
+        // Start with: making a basic object containing just the question
         const polishedItem = {
           "question": he.decode(item.question),
-          "id": nanoid()
+          "id": nanoid(),
         }
+        // now add the answers as objects too - what info do they need to track?
+
+        polishedItem.answers = item.incorrect_answers.map((ans) => {
+          return {
+            "text": he.decode(ans),
+            "id": nanoid(),
+            "isCorrect": false,
+          }
+        })
+
+        // Now add the correct answer, then shuffle
+        const correctAnswer = {
+          "text": he.decode(item.correct_answer),
+          "id": nanoid(),
+          "isCorrect": true,
+        }
+        polishedItem.answers.push(correctAnswer)
+        shuffle(polishedItem.answers)
+
         return polishedItem
       }
     )
-
-
-    // Start with: making a basic object containing just the question
-    // Then add the answers as objects too - what info do they need to track?
-    // Then shuffle them
-    // Remember react needs unique ids on all of these, so let's add them too
-
-
-
-    // push the new object onto the array
-
 
     return updatedData
   }
