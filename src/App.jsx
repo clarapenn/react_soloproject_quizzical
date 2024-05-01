@@ -1,5 +1,6 @@
 import React from "react"
 import Splash from "./components/Splash"
+import he from "he"
 
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
     let updatedData = data.results.map(
       item => {
         const polishedItem = {
-          "question": item.question
+          "question": he.decode(item.question)
         }
         return polishedItem
       }
