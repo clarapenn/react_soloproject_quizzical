@@ -1,5 +1,6 @@
 import React from "react"
 import Splash from "./components/Splash"
+import QuizSection from "./components/QuizSection"
 import he from "he"
 import {nanoid} from "nanoid"
 
@@ -21,6 +22,7 @@ export default function App() {
     };
     fetchData()
   }, []); // not watching any variables, so only runs when we call it on the prev line
+
 
   function shuffle(array) {
     // https://stackoverflow.com/a/2450976
@@ -46,33 +48,43 @@ export default function App() {
     // loop through data.results and for each result object, make a new object with only
     // what we need, and add to updatedData.
 
+    if (data == null) {
+      console.log("Quiz data not ready yet - cannot prepare data");
+      return;
+    }
+
+    console.log("Trying to prepare raw quiz data")
+
     let updatedData = data.results.map(
       item => {
         // Start with: making a basic object containing just the question
-        const polishedItem = {
+        const cleanedItem = {
           "question": he.decode(item.question),
           "id": nanoid(),
         }
-        // now add the answers as objects too - what info do they need to track?
 
-        polishedItem.answers = item.incorrect_answers.map((ans) => {
+        // now add the answers as objects too - what info do they need to track?
+        cleanedItem.answers = item.incorrect_answers.map((ans) => {
           return {
             "text": he.decode(ans),
             "id": nanoid(),
             "isCorrect": false,
-          }
+            "isSelected": false,
+            // "markAsSelected": TODO: function like isHeld
+        }
         })
-
         // Now add the correct answer, then shuffle
         const correctAnswer = {
           "text": he.decode(item.correct_answer),
           "id": nanoid(),
           "isCorrect": true,
-        }
-        polishedItem.answers.push(correctAnswer)
-        shuffle(polishedItem.answers)
+          "isSelected": false,
+          // "markAsSelected": TODO: function like isHeld
+          }
+        cleanedItem.answers.push(correctAnswer)
+        shuffle(cleanedItem.answers)
 
-        return polishedItem
+        return cleanedItem
       }
     )
 
@@ -87,7 +99,15 @@ export default function App() {
       {quizData === null ? (
         <p>Loading data...</p>
       ) : (
-        <pre>{JSON.stringify(quizData, null, 2)}</pre> // For now just show we have the data
+        <div>
+          {quizData.map(quizItem => (
+            <QuizSection
+              key={quizItem.id}
+              question={quizItem.question}
+              answers={quizItem.answers}
+            />
+          ))}
+        </div>
       )}
 
     </main>
