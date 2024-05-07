@@ -1,16 +1,11 @@
 import React from "react"
 
-import Answer from "./Answer"
-
-
 export default function QuizSection(props) {
 
     const answerButtons = props.answers.map((answer)=> (
-        <Answer
-            key={answer.id}
-            text={answer.text}
-            // TODO: pass down the markAsSelected callback thing for onclick
-        />
+        <button key={answer.id} id={answer.id} /*onclick=answer.markAsSelected()*/ className="answer">
+            {answer.text}
+        </button>
     ))
 
     return (
