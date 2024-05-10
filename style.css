@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #f5f7fb;
+}
+
 .container {
   width: 100%;
   min-height: 100vh;
@@ -11,7 +15,6 @@
 
 .splash {
   display: grid;
-  background-color: rgba(77, 91, 158, 0.1);
   grid-template-rows: 1fr 1fr;
   width: 550px;
   height: 550px;
@@ -40,17 +43,58 @@ h1:hover {
 
 h2 {
   font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
+  font-size: 18px;
+  font-weight: 600;
   font-style: normal;
   font-variation-settings: "slnt" 0;
+  color: #394170;
+  margin-top: 35px;
 }
 
 .startButton {
-  background-color: rgb(77, 91, 158);
+  background-color: #4d5b9e;
   border: none; /* remove default button border */
   padding: 10px 20px; /* adjust padding as needed */
   color: white; /* text color */
   border-radius: 7px; /* adjust corner roundness as desired */
   cursor: pointer; /* indicates clickable element */
+}
+
+.answers {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.answerButton {
+  background-color: white;
+  color: #4d5b9e;
+  border: 2px solid #183885;
+  padding: 7px 7px; /* Adjust padding as needed */
+  border-radius: 7px; /* Adjust corner roundness */
+  cursor: pointer; /* Indicate clickable button */
+  margin-right: 20px;
+  margin-top: 4px;
+  /* text #f5f7fb; */
+}
+
+.answerButton:hover {
+  background-color: lemonchiffon;
+  color: black;
+  transition: 0.3s;
+}
+
+.answerButtonSelected {
+    background-color: ;#d6dbf5
+}
+
+.checkAnswersButton {
+  background-color: #183885;
+  border: none; /* remove default button border */
+  padding: 10px 20px; /* adjust padding as needed */
+  color: white; /* text color */
+  border-radius: 7px; /* adjust corner roundness as desired */
+  cursor: pointer; /* indicates clickable element */
+  display: block;
+  margin: auto;
+  margin-top: 40px;
 }

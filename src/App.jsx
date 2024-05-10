@@ -65,21 +65,23 @@ export default function App() {
 
         // now add the answers as objects too - what info do they need to track?
         cleanedItem.answers = item.incorrect_answers.map((ans) => {
+          const answerId = nanoid();
           return {
             "text": he.decode(ans),
-            "id": nanoid(),
+            "id": answerId,
             "isCorrect": false,
             "isSelected": false,
-            // "markAsSelected": TODO: function like isHeld
+            "toggleSelected": (() => toggleSelected(answerId))
         }
         })
         // Now add the correct answer, then shuffle
+        const correctAnswerId = nanoid();
         const correctAnswer = {
           "text": he.decode(item.correct_answer),
-          "id": nanoid(),
+          "id": correctAnswerId,
           "isCorrect": true,
           "isSelected": false,
-          // "markAsSelected": TODO: function like isHeld
+          "toggleSelected": (() => toggleSelected(correctAnswerId))
           }
         cleanedItem.answers.push(correctAnswer)
         shuffle(cleanedItem.answers)
@@ -87,28 +89,81 @@ export default function App() {
         return cleanedItem
       }
     )
-
     return updatedData
+  }
+
+  function setNewQuiz(){
+    setquizInProgress(true)
+  }
+
+  function toggleSelected(answerId){
+    console.log("in toggleSelected for id", answerId);
+    setQuizData((oldQuizData) => {
+
+      // loop through each item in oldQuizData
+      // for each of those items:
+      //   loop through all the answers
+      //   if the id of the answer matches the given answerId
+      //   toggle the isSelected attribute of that answer - ideally in place to avoid rebuilding anything
+
+      let foundAnswer = false;
+      for (let i = 0; i < oldQuizData.length; i++) {
+        if (foundAnswer) {
+          break;
+        }
+        let answerArray = oldQuizData[i].answers;
+        for (let j = 0; j < answerArray.length; j++) {
+          let answer = answerArray[j];
+          if (answer.id === answerId){
+            // flip isSelected to the opposite value
+            console.log("Before: ", answer.isSelected)
+            answer.isSelected = !answer.isSelected;
+            console.log("After: ", answer.isSelected)
+            // because we've found it, we don't need to look any more
+            foundAnswer = true; // to control the outer loop
+            break;
+          }
+        }
+      }
+      console.log("oldQuizData after change", oldQuizData)
+      console.log(typeof(oldQuizData))
+      return oldQuizData
+    })
   }
 
   return (
     <main className="container">
-      {/* <Splash />*/}
 
-      {/* TODO: move the below into a Quiz component, with the data passed in a prop */}
-      {quizData === null ? (
-        <p>Loading data...</p>
-      ) : (
-        <div>
-          {quizData.map(quizItem => (
-            <QuizSection
-              key={quizItem.id}
-              question={quizItem.question}
-              answers={quizItem.answers}
-            />
-          ))}
-        </div>
-      )}
+      {/* if(quizInProgress){
+        <splash>
+      } else {
+        if(quizdata === null){
+          <p>loading</p>>
+        }else{
+          all the map stuff here
+        }
+      } */}
+
+      {!quizInProgress ?
+        <Splash setNewQuiz={setNewQuiz} />
+        :
+        quizData === null ? (
+          <p>Loading data...</p>
+        ) : (
+          <div>
+            {quizData.map(quizItem => (
+              <QuizSection
+                key={quizItem.id}
+                question={quizItem.question}
+                answers={quizItem.answers}
+              />
+              ))}
+
+            <button className="checkAnswersButton">Check answers</button>
+          </div>
+          // <pre>{JSON.stringify(quizData, null, 2)}</pre> // For now just show we have the data
+        )
+      }
 
     </main>
   )
