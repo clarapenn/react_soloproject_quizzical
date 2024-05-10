@@ -83,8 +83,8 @@ h2 {
   transition: 0.3s;
 }
 
-.answerButtonSelected {
-    background-color: ;#d6dbf5
+.answerButton.answerSelected {
+  background-color: #d6dbf5;
 }
 
 .checkAnswersButton {

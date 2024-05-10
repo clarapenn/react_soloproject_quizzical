@@ -4,15 +4,15 @@ import QuizSection from "./components/QuizSection"
 import he from "he"
 import {nanoid} from "nanoid"
 
-
 export default function App() {
 
   const [quizData, setQuizData] = React.useState(null);
+  const [quizInProgress, setquizInProgress] = React.useState(false)
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://opentdb.com/api.php?amount=5&category=13&difficulty=easy&type=multiple');
+        const response = await fetch('https://opentdb.com/api.php?amount=5&category=11&difficulty=easy&type=multiple');
         const data = await response.json();
         const preparedData = prepareData(data);
         setQuizData(preparedData);
@@ -58,11 +58,11 @@ export default function App() {
     let updatedData = data.results.map(
       item => {
         // Start with: making a basic object containing just the question
+        const questionId = nanoid();
         const cleanedItem = {
           "question": he.decode(item.question),
-          "id": nanoid(),
+          "id": questionId,
         }
-
         // now add the answers as objects too - what info do they need to track?
         cleanedItem.answers = item.incorrect_answers.map((ans) => {
           const answerId = nanoid();
@@ -71,7 +71,7 @@ export default function App() {
             "id": answerId,
             "isCorrect": false,
             "isSelected": false,
-            "toggleSelected": (() => toggleSelected(answerId))
+            "toggleSelected": (() => toggleSelected(questionId, answerId))
         }
         })
         // Now add the correct answer, then shuffle
@@ -81,7 +81,7 @@ export default function App() {
           "id": correctAnswerId,
           "isCorrect": true,
           "isSelected": false,
-          "toggleSelected": (() => toggleSelected(correctAnswerId))
+          "toggleSelected": (() => toggleSelected(questionId, correctAnswerId))
           }
         cleanedItem.answers.push(correctAnswer)
         shuffle(cleanedItem.answers)
@@ -96,38 +96,36 @@ export default function App() {
     setquizInProgress(true)
   }
 
-  function toggleSelected(answerId){
-    console.log("in toggleSelected for id", answerId);
-    setQuizData((oldQuizData) => {
 
-      // loop through each item in oldQuizData
-      // for each of those items:
-      //   loop through all the answers
-      //   if the id of the answer matches the given answerId
-      //   toggle the isSelected attribute of that answer - ideally in place to avoid rebuilding anything
+  function toggleSelected(questionId, answerId){
+    console.log("in toggleSelected for id", questionId, answerId);
 
-      let foundAnswer = false;
+    setQuizData(oldQuizData => {
+
+      const newQuizData = [];
+
       for (let i = 0; i < oldQuizData.length; i++) {
-        if (foundAnswer) {
-          break;
-        }
-        let answerArray = oldQuizData[i].answers;
-        for (let j = 0; j < answerArray.length; j++) {
-          let answer = answerArray[j];
-          if (answer.id === answerId){
-            // flip isSelected to the opposite value
-            console.log("Before: ", answer.isSelected)
-            answer.isSelected = !answer.isSelected;
-            console.log("After: ", answer.isSelected)
-            // because we've found it, we don't need to look any more
-            foundAnswer = true; // to control the outer loop
-            break;
+        const newQuizItem = oldQuizData[i];
+        const oldAnswerArray = newQuizItem.answers;
+        const newAnswerArray = []
+
+        for (let j = 0; j < oldAnswerArray.length; j++) {
+          let originalAnswer = oldAnswerArray[j];
+
+          if(questionId === newQuizItem.id){
+            let updatedAnswer = {
+              ...originalAnswer,
+              isSelected: originalAnswer.id === answerId ? true : false
+            }
+            newAnswerArray.push(updatedAnswer)
+          } else {
+            newAnswerArray.push(originalAnswer)
           }
         }
+        newQuizItem.answers = newAnswerArray;
+        newQuizData.push(newQuizItem);
       }
-      console.log("oldQuizData after change", oldQuizData)
-      console.log(typeof(oldQuizData))
-      return oldQuizData
+      return newQuizData;
     })
   }
 
@@ -168,25 +166,3 @@ export default function App() {
     </main>
   )
 }
-
-
-
-// function allNewDice() {
-//   const newDice = []
-//   for (let i = 0; i < 10; i++) {
-//       newDice.push({
-//           value: Math.ceil(Math.random() * 6),
-//           isHeld: false,
-//           id: nanoid()
-//       })
-//   }
-//   return newDice
-
-
-
-
-// const [questionsAndAnswers, setQuestionsAndAnswers] = React.useState(() =>
-
-//       fetch(apiUrl).then(res => res.json()).then(data => data.results)
-
-//   )
