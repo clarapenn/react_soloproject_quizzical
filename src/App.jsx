@@ -148,7 +148,7 @@ export default function App() {
         quizData === null ? (
           <p>Loading data...</p>
         ) : (
-          <div>
+          <div className="game">
             {quizData.map(quizItem => (
               <QuizSection
                 key={quizItem.id}

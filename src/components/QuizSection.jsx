@@ -33,6 +33,7 @@ export default function QuizSection(props) {
                     />
                 ))}
             </div>
+            <hr></hr>
         </div>
         )
     }
