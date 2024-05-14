@@ -8,6 +8,8 @@ export default function App() {
 
   const [quizData, setQuizData] = React.useState(null);
   const [quizInProgress, setQuizInProgress] = React.useState(false)
+  const [answersChecked, setAnswersChecked] = React.useState(false)
+  const [allCorrect, setAllCorrect] = React.useState(false)
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -125,8 +127,37 @@ export default function App() {
         newQuizItem.answers = newAnswerArray;
         newQuizData.push(newQuizItem);
       }
-      return newQuizData;
+      return newQuizData
     })
+  }
+
+  function checkAnswers() {
+
+    let selectedAnswerCount = 0
+    let correctAnswerChosen = 0
+
+    for (let i = 0; i < quizData.length; i++) {
+      const answers = quizData[i].answers;
+      for (let j = 0; j < answers.length; j++ ) {
+        if (answers[j].isSelected === true)  {
+          selectedAnswerCount += 1
+        }
+        if (answers[j].isCorrect === true && answers[j].isSelected === true){
+          correctAnswerChosen += 1
+        }
+      }
+    }
+
+    if (selectedAnswerCount < 5) {
+      console.log("You haven't chosen all your answers!")
+    } else {
+      setAnswersChecked(true);
+      console.log("set answersChecked to true")
+      if (selectedAnswerCount === 5 && correctAnswerChosen === 5) {
+        setAllCorrect(true);
+        console.log("set all correct to true")
+      }
+    }
   }
 
   return (
@@ -157,7 +188,7 @@ export default function App() {
               />
               ))}
 
-            <button className="checkAnswersButton">Check answers</button>
+            <button onClick={checkAnswers} className="checkAnswersButton">Check answers</button>
           </div>
           // <pre>{JSON.stringify(quizData, null, 2)}</pre> // For now just show we have the data
         )
