@@ -7,7 +7,7 @@ import {nanoid} from "nanoid"
 export default function App() {
 
   const [quizData, setQuizData] = React.useState(null);
-  const [quizInProgress, setquizInProgress] = React.useState(false)
+  const [quizInProgress, setQuizInProgress] = React.useState(false)
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -93,7 +93,7 @@ export default function App() {
   }
 
   function setNewQuiz(){
-    setquizInProgress(true)
+    setQuizInProgress(true)
   }
 
 
