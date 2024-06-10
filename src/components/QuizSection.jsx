@@ -4,18 +4,6 @@ import Answer from "./Answer"
 
 export default function QuizSection(props) {
 
-    // const answerButtons = props.answers.map((answer)=> (
-    //     <button
-    //         key={answer.id}
-    //         id={answer.id}
-    //         onClick={answer.toggleSelected}
-    //         className={`answerButton ${answer.isSelected}`}
-    //     >
-    //     {answer.text}
-    //     </button>
-    // ))
-    console.log(props)
-
     return (
         <div key={props.question.id} className="quiz-section">
 
@@ -29,7 +17,9 @@ export default function QuizSection(props) {
                         id={answer.id}
                         text={answer.text}
                         isSelected={answer.isSelected}
+                        isCorrect={answer.isCorrect}
                         toggleSelected={answer.toggleSelected}
+                        showAnswers={props.showAnswers}
                     />
                 ))}
             </div>

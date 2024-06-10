@@ -10,6 +10,7 @@ export default function App() {
   const [quizInProgress, setQuizInProgress] = React.useState(false)
   const [answersChecked, setAnswersChecked] = React.useState(false)
   const [allCorrect, setAllCorrect] = React.useState(false)
+  const [score, setScore] = React.useState(0)
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -152,6 +153,7 @@ export default function App() {
       console.log("You haven't chosen all your answers!")
     } else {
       setAnswersChecked(true);
+      setScore(correctAnswerChosen)
       console.log("set answersChecked to true")
       if (selectedAnswerCount === 5 && correctAnswerChosen === 5) {
         setAllCorrect(true);
@@ -179,17 +181,38 @@ export default function App() {
         quizData === null ? (
           <p>Loading data...</p>
         ) : (
+        ) : ( answersChecked == false ? (
+            // render active game
           <div className="game">
             {quizData.map(quizItem => (
               <QuizSection
                 key={quizItem.id}
                 question={quizItem.question}
                 answers={quizItem.answers}
+                showAnswers={false}
+              />
+              ))}
+            <button onClick={checkAnswers} className="checkAnswersButton">Check answers</button>
+          </div>
+        ) : (
+            // render completed game
+            <div className="game">
+            <h2>How did you do?</h2>
+            {quizData.map(quizItem => (
+              <QuizSection
+                key={quizItem.id}
+                question={quizItem.question}
+                answers={quizItem.answers}
+                showAnswers={true}
               />
               ))}
 
-            <button onClick={checkAnswers} className="checkAnswersButton">Check answers</button>
-          </div>
+              <h2>You scored {score}/5 correct answers!</h2>
+
+
+
+            </div>
+        )
           // <pre>{JSON.stringify(quizData, null, 2)}</pre> // For now just show we have the data
         )
       }

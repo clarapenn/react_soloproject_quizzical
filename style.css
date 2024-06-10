@@ -86,7 +86,7 @@ h2 {
   /* text #f5f7fb; */
 }
 
-.answerButton:hover {
+.answerButton:enabled:hover {
   background-color: lemonchiffon;
   color: black;
   transition: 0.3s;
@@ -97,11 +97,12 @@ h2 {
 }
 
 .answerButton.answerCorrect {
-  background-color: #d6dbf5;
+  background-color: #94d7a2;
 }
 
 .answerButton.answerIncorrect {
-  background-color: #d6dbf5;
+  background-color: #df5273;
+  opacity: 0.7;
 }
 
 .checkAnswersButton {
