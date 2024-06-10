@@ -192,8 +192,10 @@ export default function App() {
         <Splash setNewQuiz={setNewQuiz} />
         :
         quizData === null ? (
-          <p>Loading data...</p>
-        ) : (
+          <div className="loading">
+            <h2>Preparing your quiz...</h2>
+            <img src="images/spinner.gif"/>
+          </div>
         ) : ( answersChecked == false ? (
             // render active game
           <div className="game">

@@ -69,6 +69,12 @@ h2 {
   cursor: pointer; /* indicates clickable element */
 }
 
+.loading {
+  width: 400px;
+  text-align: center;
+  margin: auto;
+}
+
 .answers {
   display: flex;
   justify-content: flex-start;
