@@ -92,8 +92,10 @@ h2 {
   transition: 0.3s;
 }
 
-.answerButton.answerSelected {
-  background-color: #d6dbf5;
+.answerButton.answerSelected,
+.answerButton.answerSelected:hover {
+  /* :hover is needed to enforce the color when selected, else answerButton:hover wins in the specificity stakes */
+  background-color: #b4b7c6;
 }
 
 .answerButton.answerCorrect {
