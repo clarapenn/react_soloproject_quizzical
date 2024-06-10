@@ -12,19 +12,16 @@ export default function App() {
   const [allCorrect, setAllCorrect] = React.useState(false)
   const [score, setScore] = React.useState(0)
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://opentdb.com/api.php?amount=5&category=11&difficulty=easy&type=multiple');
-        const data = await response.json();
-        const preparedData = prepareData(data);
-        setQuizData(preparedData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData()
-  }, []); // not watching any variables, so only runs when we call it on the prev line
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://opentdb.com/api.php?amount=5&category=11&difficulty=easy&type=multiple');
+      const data = await response.json();
+      const preparedData = prepareData(data);
+      setQuizData(preparedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
 
   function shuffle(array) {
@@ -162,6 +159,22 @@ export default function App() {
     }
   }
 
+  function restartGame (){
+    setQuizData(null)
+    setAllCorrect(false)
+    setAnswersChecked(false)
+
+    fetchData()
+  }
+
+  // On first load of the app, fetch the data (and process it to our liking)
+  React.useEffect(
+    () => {
+      fetchData()
+    },
+    [] // not watching any variables, so only runs when we call it on the prev line
+  )
+
   return (
     <main className="container">
 
@@ -209,6 +222,7 @@ export default function App() {
 
               <h2>You scored {score}/5 correct answers!</h2>
 
+              <button onClick={restartGame} className="restartGameButton">play again</button>
 
 
             </div>
