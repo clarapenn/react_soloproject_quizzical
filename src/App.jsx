@@ -3,6 +3,8 @@ import Splash from "./components/Splash"
 import QuizSection from "./components/QuizSection"
 import he from "he"
 import {nanoid} from "nanoid"
+import Confetti from "react-confetti"
+
 
 export default function App() {
 
@@ -151,10 +153,8 @@ export default function App() {
     } else {
       setAnswersChecked(true);
       setScore(correctAnswerChosen)
-      console.log("set answersChecked to true")
       if (selectedAnswerCount === 5 && correctAnswerChosen === 5) {
         setAllCorrect(true);
-        console.log("set all correct to true")
       }
     }
   }
@@ -222,9 +222,10 @@ export default function App() {
               />
               ))}
 
-              <h2>You scored {score}/5 correct answers!</h2>
+            {allCorrect && <Confetti />}
+            <h2>You scored {score}/5 correct answers!</h2>
 
-              <button onClick={restartGame} className="restartGameButton">play again</button>
+              <button onClick={restartGame} className="restartGameButton">Play again</button>
 
 
             </div>
